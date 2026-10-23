@@ -1,0 +1,77 @@
+/* ApplicationsPage.css */
+
+.applications-page {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.applications-page__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-4) var(--space-6);
+  border-bottom: var(--border-strong);
+  background: var(--surface-header);
+  height: var(--topbar-height);
+  flex-shrink: 0;
+  gap: var(--space-4);
+}
+
+.applications-page__header-left {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+}
+
+.applications-page__header-right {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.applications-page__title {
+  font-size: var(--text-xl);
+  font-weight: var(--weight-semibold);
+  color: var(--color-grey-900);
+  line-height: var(--leading-tight);
+}
+
+.applications-page__count {
+  font-size: var(--text-sm);
+  color: var(--color-grey-400);
+}
+
+.applications-page__action-btn {
+  padding: var(--space-2) var(--space-4);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  color: var(--color-white);
+  background: var(--color-accent);
+  border-radius: var(--radius-md);
+  transition: background var(--transition-fast);
+  border: none;
+}
+
+.applications-page__action-btn:not(:disabled):hover {
+  background: var(--color-accent-hover);
+}
+
+.applications-page__action-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.applications-page__body {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+}
+
+.applications-page__table-area {
+  flex: 1;
+  overflow: auto;
+  min-width: 0;
+}

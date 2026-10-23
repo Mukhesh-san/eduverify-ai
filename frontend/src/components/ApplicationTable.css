@@ -1,0 +1,104 @@
+/* ApplicationTable.css */
+
+.app-table__wrapper {
+  overflow-x: auto;
+  width: 100%;
+}
+
+.app-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-sm);
+  background: var(--surface-panel);
+}
+
+.app-table__th {
+  padding: var(--space-3) var(--space-4);
+  text-align: left;
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-grey-500);
+  background: var(--color-grey-50);
+  border-bottom: var(--border-strong);
+  white-space: nowrap;
+}
+
+.app-table__row {
+  cursor: pointer;
+  border-bottom: var(--border-default);
+  transition: background var(--transition-fast);
+}
+
+.app-table__row:hover {
+  background: var(--color-grey-50);
+}
+
+.app-table__row--selected {
+  background: var(--color-accent-light);
+}
+
+.app-table__row--selected:hover {
+  background: var(--color-accent-light);
+}
+
+.app-table__row:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: -2px;
+}
+
+.app-table__td {
+  padding: var(--space-3) var(--space-4);
+  vertical-align: middle;
+  color: var(--color-grey-800);
+}
+
+.app-table__td--id {
+  white-space: nowrap;
+}
+
+.app-table__td--name {
+  font-weight: var(--weight-medium);
+  white-space: nowrap;
+}
+
+.app-table__td--programme {
+  color: var(--color-grey-600);
+  max-width: 260px;
+}
+
+.app-table__td--date {
+  white-space: nowrap;
+  color: var(--color-grey-500);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+}
+
+.app-table__app-id {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--color-grey-500);
+}
+
+/* State views */
+.app-table__state {
+  padding: var(--space-12) var(--space-8);
+  text-align: center;
+}
+
+.app-table__state--error {
+  background: var(--color-ineligible-bg);
+}
+
+.app-table__state-heading {
+  font-size: var(--text-base);
+  font-weight: var(--weight-semibold);
+  color: var(--color-ineligible);
+  margin-bottom: var(--space-2);
+}
+
+.app-table__state-text {
+  font-size: var(--text-sm);
+  color: var(--color-grey-600);
+}

@@ -1,0 +1,199 @@
+/*
+ * EduVerify AI — Global design system
+ *
+ * Design principles:
+ *   - Light interface, strong typography, deliberate whitespace.
+ *   - Restrained two-colour palette: near-black text on white/grey surfaces.
+ *   - Single accent colour for interactive elements only.
+ *   - No decorative gradients, no shadow stacks, no rounded-card excess.
+ *   - Spacing based on a 4px grid (--space-* tokens).
+ *   - All component styles live in component-specific files; this file
+ *     provides only the design tokens and bare element resets.
+ */
+
+/* --------------------------------------------------------------------------
+   CSS custom properties (design tokens)
+   -------------------------------------------------------------------------- */
+
+:root {
+  /* Typography */
+  --font-body: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+  --text-xs: 0.6875rem;   /* 11px */
+  --text-sm: 0.8125rem;   /* 13px */
+  --text-base: 0.9375rem; /* 15px */
+  --text-lg: 1.0625rem;   /* 17px */
+  --text-xl: 1.25rem;     /* 20px */
+  --text-2xl: 1.5rem;     /* 24px */
+
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+
+  --leading-tight: 1.25;
+  --leading-normal: 1.5;
+
+  /* Colour palette — neutral */
+  --color-white: #ffffff;
+  --color-grey-50: #f8f8f8;
+  --color-grey-100: #f0f0f0;
+  --color-grey-200: #e4e4e4;
+  --color-grey-300: #cccccc;
+  --color-grey-400: #9a9a9a;
+  --color-grey-500: #737373;
+  --color-grey-600: #525252;
+  --color-grey-700: #343434;
+  --color-grey-800: #212121;
+  --color-grey-900: #111111;
+
+  /* Accent — muted governmental blue */
+  --color-accent: #1a56a0;
+  --color-accent-hover: #154486;
+  --color-accent-light: #e8f0fb;
+
+  /* Semantic colours */
+  --color-eligible: #1a6e3a;
+  --color-eligible-bg: #ebf5ef;
+  --color-ineligible: #9a1f1f;
+  --color-ineligible-bg: #fdf0f0;
+  --color-review: #7a5800;
+  --color-review-bg: #fdf6e3;
+  --color-pending: #3a5a8c;
+  --color-pending-bg: #edf2fb;
+  --color-missing: #8a4000;
+  --color-missing-bg: #fff4ec;
+  --color-unreadable: #6b3a8a;
+  --color-unreadable-bg: #f7f0fd;
+
+  /* Surfaces */
+  --surface-page: var(--color-grey-50);
+  --surface-panel: var(--color-white);
+  --surface-sidebar: #1e2535;
+  --surface-header: var(--color-white);
+
+  /* Borders */
+  --border-default: 1px solid var(--color-grey-200);
+  --border-strong: 1px solid var(--color-grey-300);
+
+  /* Spacing (4px grid) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  /* Layout */
+  --sidebar-width: 220px;
+  --topbar-height: 52px;
+  --detail-panel-width: 440px;
+
+  /* Radius */
+  --radius-sm: 3px;
+  --radius-md: 5px;
+
+  /* Transitions */
+  --transition-fast: 120ms ease;
+}
+
+/* --------------------------------------------------------------------------
+   Reset
+   -------------------------------------------------------------------------- */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  height: 100%;
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  height: 100%;
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  font-weight: var(--weight-regular);
+  line-height: var(--leading-normal);
+  color: var(--color-grey-800);
+  background: var(--surface-page);
+}
+
+#root {
+  height: 100%;
+  display: flex;
+}
+
+a {
+  color: var(--color-accent);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+button {
+  font-family: inherit;
+  font-size: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+/* --------------------------------------------------------------------------
+   Utility classes
+   -------------------------------------------------------------------------- */
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* --------------------------------------------------------------------------
+   Scrollbars (subtle, cross-browser)
+   -------------------------------------------------------------------------- */
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-grey-300) transparent;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-grey-300);
+  border-radius: 3px;
+}

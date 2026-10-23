@@ -1,0 +1,145 @@
+/* EligibilityPanel.css */
+
+.elig-panel {
+  padding: var(--space-6);
+  border-top: var(--border-default);
+}
+
+.elig-panel__section-label {
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--color-grey-500);
+  margin-bottom: var(--space-3);
+}
+
+.elig-panel__outcome {
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-5);
+  border: var(--border-default);
+}
+
+.elig-panel__outcome--eligible {
+  background: var(--color-eligible-bg);
+  border-color: var(--color-eligible);
+}
+
+.elig-panel__outcome--ineligible {
+  background: var(--color-ineligible-bg);
+  border-color: var(--color-ineligible);
+}
+
+.elig-panel__outcome--requires-review {
+  background: var(--color-review-bg);
+  border-color: var(--color-review);
+}
+
+.elig-panel__outcome-label {
+  display: block;
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  margin-bottom: var(--space-2);
+}
+
+.elig-panel__outcome--eligible .elig-panel__outcome-label {
+  color: var(--color-eligible);
+}
+.elig-panel__outcome--ineligible .elig-panel__outcome-label {
+  color: var(--color-ineligible);
+}
+.elig-panel__outcome--requires-review .elig-panel__outcome-label {
+  color: var(--color-review);
+}
+
+.elig-panel__summary {
+  font-size: var(--text-sm);
+  color: var(--color-grey-700);
+  line-height: var(--leading-normal);
+}
+
+.elig-panel__rules-heading {
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--color-grey-500);
+  margin-bottom: var(--space-3);
+}
+
+.elig-panel__rules {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-bottom: var(--space-5);
+}
+
+.elig-rule {
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-sm);
+  border: var(--border-default);
+  background: var(--surface-panel);
+}
+
+.elig-rule--fail {
+  border-left: 3px solid var(--color-ineligible);
+}
+
+.elig-rule--pass {
+  border-left: 3px solid var(--color-eligible);
+}
+
+.elig-rule__header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.elig-rule__id {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--color-grey-500);
+  background: var(--color-grey-100);
+  padding: 1px 5px;
+  border-radius: 2px;
+}
+
+.elig-rule__verdict {
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.elig-rule__verdict--pass {
+  color: var(--color-eligible);
+}
+
+.elig-rule__verdict--fail {
+  color: var(--color-ineligible);
+}
+
+.elig-rule__desc {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  color: var(--color-grey-700);
+}
+
+.elig-rule__evidence {
+  font-size: var(--text-sm);
+  color: var(--color-grey-600);
+  line-height: var(--leading-normal);
+  padding-left: calc(var(--space-4) + 2px);
+}
+
+.elig-panel__disclaimer {
+  font-size: var(--text-xs);
+  color: var(--color-grey-500);
+  line-height: var(--leading-normal);
+  border-top: var(--border-default);
+  padding-top: var(--space-4);
+}

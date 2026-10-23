@@ -1,0 +1,70 @@
+/* StatusBadge.css */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-medium);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+}
+
+/* Neutral */
+.badge--neutral {
+  color: var(--color-grey-500);
+  background: var(--color-grey-100);
+}
+
+/* Review status */
+.badge--review-pending {
+  color: var(--color-pending);
+  background: var(--color-pending-bg);
+}
+.badge--review-under_review {
+  color: var(--color-review);
+  background: var(--color-review-bg);
+}
+.badge--review-approved {
+  color: var(--color-eligible);
+  background: var(--color-eligible-bg);
+}
+.badge--review-rejected {
+  color: var(--color-ineligible);
+  background: var(--color-ineligible-bg);
+}
+.badge--review-deferred {
+  color: var(--color-grey-600);
+  background: var(--color-grey-100);
+}
+
+/* Eligibility outcome */
+.badge--eligibility-eligible {
+  color: var(--color-eligible);
+  background: var(--color-eligible-bg);
+}
+.badge--eligibility-ineligible {
+  color: var(--color-ineligible);
+  background: var(--color-ineligible-bg);
+}
+.badge--eligibility-requires-review {
+  color: var(--color-review);
+  background: var(--color-review-bg);
+}
+
+/* Document status */
+.badge--doc-present {
+  color: var(--color-eligible);
+  background: var(--color-eligible-bg);
+}
+.badge--doc-missing {
+  color: var(--color-missing);
+  background: var(--color-missing-bg);
+}
+.badge--doc-unreadable {
+  color: var(--color-unreadable);
+  background: var(--color-unreadable-bg);
+}

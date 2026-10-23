@@ -1,0 +1,117 @@
+/* Sidebar.css */
+
+.sidebar {
+  width: var(--sidebar-width);
+  min-width: var(--sidebar-width);
+  height: 100%;
+  background: var(--surface-sidebar);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.sidebar__brand {
+  padding: var(--space-5) var(--space-4) var(--space-4);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.sidebar__brand-name {
+  display: block;
+  font-size: var(--text-base);
+  font-weight: var(--weight-semibold);
+  color: #ffffff;
+  letter-spacing: -0.01em;
+}
+
+.sidebar__brand-sub {
+  display: block;
+  font-size: var(--text-xs);
+  color: rgba(255, 255, 255, 0.45);
+  margin-top: 2px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.sidebar__nav {
+  list-style: none;
+  padding: var(--space-3) 0;
+  flex: 1;
+}
+
+.sidebar__nav-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
+  padding: var(--space-2) var(--space-4);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  color: rgba(255, 255, 255, 0.6);
+  text-align: left;
+  border-radius: 0;
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+
+.sidebar__nav-item:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.sidebar__nav-item--active {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
+.sidebar__nav-item:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.sidebar__nav-icon {
+  font-size: 14px;
+  width: 16px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.sidebar__footer {
+  padding: var(--space-4);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.sidebar__api-status {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-2);
+}
+
+.sidebar__api-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.sidebar__api-dot--ok {
+  background: #4caf50;
+}
+
+.sidebar__api-dot--error {
+  background: #e53935;
+}
+
+.sidebar__api-dot--unknown {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.sidebar__api-label {
+  font-size: var(--text-xs);
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.sidebar__data-notice {
+  font-size: var(--text-xs);
+  color: rgba(255, 255, 255, 0.25);
+  line-height: var(--leading-tight);
+}
