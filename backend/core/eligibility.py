@@ -9,7 +9,11 @@ Design principles
 * The `evidence` field in RuleResult cites the actual field values that drove
   each decision, not a fabricated summary.
 * Rules are intentionally conservative: ambiguous data (e.g., missing CGPA
-  and missing percentage) produces REQUIRES_REVIEW, never a pass.
+  and missing percentage, or an unknown programme) is marked inconclusive
+  and produces REQUIRES_REVIEW at the aggregate level, never a pass and
+  never an unsupported INELIGIBLE result. Deterministic failures (score
+  below the configured floor, active backlogs, missing documents, unmatched
+  discipline) still produce INELIGIBLE.
 
 Programme-specific minimum CGPA/percentage requirements
 ---------------------------------------------------------
@@ -92,6 +96,7 @@ def rule_cgpa_or_percentage(app: Application) -> RuleResult:
             rule_id="R01",
             description="Minimum academic score requirement",
             passed=False,
+            inconclusive=True,
             evidence=(
                 f"Programme '{app.programme_applied}' has no configured eligibility threshold. "
                 "Manual review required before a score comparison can be made."
@@ -130,11 +135,12 @@ def rule_cgpa_or_percentage(app: Application) -> RuleResult:
             ),
         )
 
-    # Neither CGPA nor percentage available.
+    # Neither CGPA nor percentage available — not enough evidence to fail.
     return RuleResult(
         rule_id="R01",
         description="Minimum academic score requirement",
         passed=False,
+        inconclusive=True,
         evidence=(
             "Neither CGPA nor aggregate percentage is present in the academic record. "
             "Score requirement cannot be evaluated. Flagged for human review."
@@ -160,10 +166,12 @@ def rule_no_active_backlogs(app: Application) -> RuleResult:
 def rule_mandatory_documents_present(app: Application) -> RuleResult:
     """R03 — All mandatory documents must have been submitted."""
     doc_map = {doc.name: doc.status for doc in app.documents}
+    # Omitted names are treated as missing. UNREADABLE is not missing;
+    # it is flagged separately by R04.
     missing = [
         name
         for name in _MANDATORY_DOCUMENTS
-        if doc_map.get(name) == DocumentStatus.MISSING
+        if doc_map.get(name) in (None, DocumentStatus.MISSING)
     ]
     passed = len(missing) == 0
     if passed:
@@ -226,6 +234,7 @@ def rule_relevant_undergraduate_degree(app: Application) -> RuleResult:
             rule_id="R05",
             description="Undergraduate discipline relevance",
             passed=False,
+            inconclusive=True,
             evidence=(
                 f"Programme '{app.programme_applied}' has no configured discipline mapping. "
                 "Manual review required."
@@ -258,10 +267,15 @@ def evaluate_eligibility(app: Application) -> EligibilityResult:
     Run all eligibility rules against an application and return an aggregate result.
 
     The outcome is determined as follows:
-    - ELIGIBLE     : all rules passed.
-    - INELIGIBLE   : one or more blocking rules failed (R01, R02, R03, R05).
-    - REQUIRES_REVIEW : any informational finding warrants human attention even
-                        if blocking rules passed (e.g., unreadable documents).
+    - ELIGIBLE        : all blocking rules passed.
+    - INELIGIBLE      : one or more blocking rules failed with sufficient
+                        evidence (R01/R02/R03/R05 deterministic failures).
+    - REQUIRES_REVIEW : blocking rules did not deterministically fail, but
+                        a rule is inconclusive (missing/unknown fields) or
+                        an informational finding warrants attention
+                        (e.g. unreadable documents).
+
+    Deterministic failures take precedence over inconclusive rules.
 
     This function is deterministic: given the same Application object it will
     always return the same EligibilityResult.
@@ -277,17 +291,28 @@ def evaluate_eligibility(app: Application) -> EligibilityResult:
     ]
     all_rules = blocking_rules + informational_rules
 
-    blocking_failures = [r for r in blocking_rules if not r.passed]
+    hard_failures = [
+        r for r in blocking_rules if not r.passed and not r.inconclusive
+    ]
+    inconclusive_blocking = [r for r in blocking_rules if r.inconclusive]
     has_unreadable = any(
         doc.status == DocumentStatus.UNREADABLE for doc in app.documents
     )
 
-    if blocking_failures:
+    if hard_failures:
         outcome = EligibilityOutcome.INELIGIBLE
-        failing_ids = ", ".join(r.rule_id for r in blocking_failures)
+        failing_ids = ", ".join(r.rule_id for r in hard_failures)
         summary = (
             f"Application does not meet eligibility requirements. "
             f"Failed rule(s): {failing_ids}. "
+            "See individual rule results for details."
+        )
+    elif inconclusive_blocking:
+        outcome = EligibilityOutcome.REQUIRES_REVIEW
+        review_ids = ", ".join(r.rule_id for r in inconclusive_blocking)
+        summary = (
+            "Eligibility cannot be determined from the available fields. "
+            f"Rule(s) requiring human review: {review_ids}. "
             "See individual rule results for details."
         )
     elif has_unreadable:

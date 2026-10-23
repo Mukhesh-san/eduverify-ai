@@ -36,6 +36,7 @@ export interface RuleResult {
   description: string
   passed: boolean
   evidence: string
+  inconclusive: boolean
 }
 
 export interface EligibilityResult {

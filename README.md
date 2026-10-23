@@ -1,92 +1,95 @@
-\# EduVerify AI
-
-
+# EduVerify AI
 
 AI-powered educational application validation, document authentication, and regulatory compliance verification.
 
+**Project ID:** SIH26261
+**Domain:** Educational certificates, admissions, and student applications
 
+**Status:** Milestone 1 — admissions review UI with synthetic fixtures and a deterministic eligibility engine.
 
-\*\*Project ID:\*\* SIH26261  
-
-\*\*Domain:\*\* Educational certificates, admissions, and student applications  
-
-\*\*Status:\*\* Initial repository setup
-
-
-
-\## Problem
-
-
+## Problem
 
 Admissions teams manually review academic documents, compare student details, check application completeness, and apply eligibility requirements. This can be slow and prone to inconsistencies.
 
-
-
-\## Proposed solution
-
-
+## Proposed solution
 
 EduVerify AI aims to provide:
 
+- Academic document text extraction.
+- Cross-document consistency checks.
+- Configurable eligibility validation.
+- Document-anomaly indicators.
+- Evidence-backed verification reports.
+- Human review and audit trails.
 
+Milestone 1 implements the eligibility review surface only, using synthetic application data. Extraction, consistency checks, anomaly detection, and trusted-source verification are not implemented yet.
 
-\- Academic document text extraction.
+## Current implementation
 
-\- Cross-document consistency checks.
+- **Frontend:** React, Vite, TypeScript. Application table, detail panel, and eligibility evidence. Upload and Settings are visible but disabled.
+- **Backend:** Python, FastAPI. Read-only JSON API over in-memory fixtures.
+- **Eligibility engine:** Deterministic rules (R01–R05) with cited field evidence. Missing or unknown fields produce `requires_review`. Deterministic failures (score below floor, backlogs, missing or omitted mandatory documents, unmatched discipline) produce `ineligible`.
+- **Data:** Seven synthetic applications in `backend/data/fixtures.py`. Every record is marked `data_source: fixture`.
 
-\- Configurable eligibility validation.
+## Important limitations
 
-\- Document-anomaly indicators.
+- Fixture data is not OCR output and is not a trusted-source verification.
+- AI extraction does not establish document authenticity. Trusted-source verification requires an authorized source or a verifiable credential.
+- Ambiguous findings are routed to human review.
+- There is no database, document upload, authentication, or persistence.
 
-\- Evidence-backed verification reports.
+## Technology stack
 
-\- Human review and audit trails.
+**Implemented**
 
+- Frontend: React, Vite, TypeScript
+- Backend: Python, FastAPI, Pydantic
+- Tests: pytest (backend), `tsc` + Vite production build (frontend)
 
+**Planned, not implemented**
 
-\## Important limitations
+- Database: PostgreSQL / Supabase
+- OCR: to be selected and tested
+- Document storage: private storage
 
+## Development
 
+Consult `AGENTS.md` for engineering guidelines and `docs/PROJECT_STATUS.md` for current progress.
 
-AI extraction does not establish document authenticity. Trusted-source verification requires an authorized source or a verifiable credential. Ambiguous findings should be reviewed by a human.
+Use synthetic documents and data during development. Do not commit API keys, credentials, or real student documents.
 
+### Backend
 
+From the repository root (Windows PowerShell):
 
-\## Planned technology stack
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+uvicorn backend.main:app --reload --port 8000
+```
 
+API docs: http://127.0.0.1:8000/api/docs
 
+```powershell
+python -m pytest
+```
 
-\- Frontend: Next.js, TypeScript, Tailwind CSS.
+### Frontend
 
-\- Backend: Python and FastAPI.
+```powershell
+cd frontend
+npm install
+npm run dev
+```
 
-\- Database: PostgreSQL / Supabase.
+The Vite dev server (http://localhost:5173) proxies `/api` to `http://localhost:8000`. Start the backend first.
 
-\- OCR: To be selected and tested.
+```powershell
+cd frontend
+npm run build
+```
 
-\- Document storage: Private storage.
-
-
-
-These are planned choices, not yet implemented features.
-
-
-
-\## Development
-
-
-
-The project is being built incrementally. Consult `AGENTS.md` for engineering guidelines and `docs/PROJECT\_STATUS.md` for current progress.
-
-
-
-Use synthetic documents and data during development.
-
-
-
-\## License
-
-
+## License
 
 Not yet selected.
-

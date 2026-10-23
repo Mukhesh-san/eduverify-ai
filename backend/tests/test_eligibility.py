@@ -123,18 +123,20 @@ class TestRuleCgpaOrPercentage:
         result = rule_cgpa_or_percentage(app)
         assert result.passed is False
 
-    def test_neither_cgpa_nor_percentage_fails(self):
+    def test_neither_cgpa_nor_percentage_is_inconclusive(self):
         app = _make_app(
             academic_record=_make_record(cgpa=None, percentage=None)
         )
         result = rule_cgpa_or_percentage(app)
         assert result.passed is False
+        assert result.inconclusive is True
         assert "human review" in result.evidence.lower()
 
-    def test_unknown_programme_fails(self):
+    def test_unknown_programme_is_inconclusive(self):
         app = _make_app(programme_applied="M.Tech — Quantum Alchemy")
         result = rule_cgpa_or_percentage(app)
         assert result.passed is False
+        assert result.inconclusive is True
         assert "no configured" in result.evidence.lower()
 
 
@@ -198,6 +200,21 @@ class TestRuleMandatoryDocuments:
         result = rule_mandatory_documents_present(app)
         assert result.passed is True
 
+    def test_omitted_mandatory_document_fails(self):
+        """A mandatory document absent from the list must not pass R03."""
+        docs = [
+            DocumentRecord(name="10th Mark Sheet", status=DocumentStatus.PRESENT),
+            DocumentRecord(name="12th Mark Sheet", status=DocumentStatus.PRESENT),
+            DocumentRecord(name="Undergraduate Degree Certificate", status=DocumentStatus.PRESENT),
+            DocumentRecord(name="Undergraduate Consolidated Marks Card", status=DocumentStatus.PRESENT),
+            # Aadhar Card omitted entirely
+        ]
+        app = _make_app(documents=docs)
+        result = rule_mandatory_documents_present(app)
+        assert result.passed is False
+        assert result.inconclusive is False
+        assert "Aadhar Card" in result.evidence
+
 
 # ---------------------------------------------------------------------------
 # R04: Unreadable documents (informational)
@@ -246,10 +263,11 @@ class TestRuleDegreeRelevance:
         result = rule_relevant_undergraduate_degree(app)
         assert result.passed is True
 
-    def test_unknown_programme_fails(self):
+    def test_unknown_programme_is_inconclusive(self):
         app = _make_app(programme_applied="M.Tech — Quantum Alchemy")
         result = rule_relevant_undergraduate_degree(app)
         assert result.passed is False
+        assert result.inconclusive is True
 
 
 # ---------------------------------------------------------------------------
@@ -273,6 +291,43 @@ class TestEvaluateEligibility:
 
     def test_ineligible_due_to_backlogs(self):
         app = _make_app(academic_record=_make_record(backlogs_active=2))
+        result = evaluate_eligibility(app)
+        assert result.outcome == EligibilityOutcome.INELIGIBLE
+        assert "R02" in result.summary
+
+    def test_missing_scores_requires_review(self):
+        app = _make_app(academic_record=_make_record(cgpa=None, percentage=None))
+        result = evaluate_eligibility(app)
+        assert result.outcome == EligibilityOutcome.REQUIRES_REVIEW
+        r01 = next(r for r in result.rules if r.rule_id == "R01")
+        assert r01.inconclusive is True
+
+    def test_unknown_programme_requires_review(self):
+        app = _make_app(programme_applied="M.Tech — Quantum Alchemy")
+        result = evaluate_eligibility(app)
+        assert result.outcome == EligibilityOutcome.REQUIRES_REVIEW
+        assert "R01" in result.summary
+        assert "R05" in result.summary
+
+    def test_omitted_mandatory_document_is_ineligible(self):
+        """Omitted documents are a deterministic completeness failure, not review-only."""
+        docs = [
+            DocumentRecord(name="10th Mark Sheet", status=DocumentStatus.PRESENT),
+            DocumentRecord(name="12th Mark Sheet", status=DocumentStatus.PRESENT),
+            DocumentRecord(name="Undergraduate Degree Certificate", status=DocumentStatus.PRESENT),
+            DocumentRecord(name="Undergraduate Consolidated Marks Card", status=DocumentStatus.PRESENT),
+        ]
+        app = _make_app(documents=docs)
+        result = evaluate_eligibility(app)
+        assert result.outcome == EligibilityOutcome.INELIGIBLE
+        assert "R03" in result.summary
+
+    def test_deterministic_failure_overrides_inconclusive_rule(self):
+        """Known evidence of ineligibility still wins over missing/unknown fields."""
+        app = _make_app(
+            programme_applied="M.Tech — Quantum Alchemy",
+            academic_record=_make_record(backlogs_active=2),
+        )
         result = evaluate_eligibility(app)
         assert result.outcome == EligibilityOutcome.INELIGIBLE
         assert "R02" in result.summary

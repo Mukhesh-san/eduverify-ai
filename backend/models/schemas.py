@@ -94,6 +94,15 @@ class RuleResult(BaseModel):
             "Must reference actual extracted fields, not fabricated confidence scores."
         )
     )
+    inconclusive: bool = Field(
+        default=False,
+        description=(
+            "True when the rule cannot be decided from the available fields "
+            "(missing scores, unknown programme, or similar). "
+            "Inconclusive blocking rules produce a requires_review outcome "
+            "unless another blocking rule has a deterministic failure."
+        ),
+    )
 
 
 class EligibilityResult(BaseModel):

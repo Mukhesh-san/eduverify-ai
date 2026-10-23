@@ -91,6 +91,10 @@
   border-left: 3px solid var(--color-eligible);
 }
 
+.elig-rule--review {
+  border-left: 3px solid var(--color-review);
+}
+
 .elig-rule__header {
   display: flex;
   align-items: center;
@@ -121,6 +125,10 @@
 
 .elig-rule__verdict--fail {
   color: var(--color-ineligible);
+}
+
+.elig-rule__verdict--review {
+  color: var(--color-review);
 }
 
 .elig-rule__desc {

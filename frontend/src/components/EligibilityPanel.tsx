@@ -11,13 +11,40 @@ const OUTCOME_LABELS: Record<string, string> = {
   requires_review: 'Requires Review',
 }
 
+function rulePresentation(rule: RuleResult): {
+  rowClass: string
+  verdictClass: string
+  verdictLabel: string
+} {
+  if (rule.inconclusive) {
+    return {
+      rowClass: 'elig-rule elig-rule--review',
+      verdictClass: 'elig-rule__verdict elig-rule__verdict--review',
+      verdictLabel: 'Review',
+    }
+  }
+  if (rule.passed) {
+    return {
+      rowClass: 'elig-rule elig-rule--pass',
+      verdictClass: 'elig-rule__verdict elig-rule__verdict--pass',
+      verdictLabel: 'Pass',
+    }
+  }
+  return {
+    rowClass: 'elig-rule elig-rule--fail',
+    verdictClass: 'elig-rule__verdict elig-rule__verdict--fail',
+    verdictLabel: 'Fail',
+  }
+}
+
 function RuleRow({ rule }: { rule: RuleResult }) {
+  const presentation = rulePresentation(rule)
   return (
-    <li className={`elig-rule${rule.passed ? ' elig-rule--pass' : ' elig-rule--fail'}`}>
+    <li className={presentation.rowClass}>
       <div className="elig-rule__header">
         <span className="elig-rule__id">{rule.rule_id}</span>
-        <span className={`elig-rule__verdict${rule.passed ? ' elig-rule__verdict--pass' : ' elig-rule__verdict--fail'}`}>
-          {rule.passed ? 'Pass' : 'Fail'}
+        <span className={presentation.verdictClass}>
+          {presentation.verdictLabel}
         </span>
         <span className="elig-rule__desc">{rule.description}</span>
       </div>
