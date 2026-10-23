@@ -5,7 +5,7 @@ AI-powered educational application validation, document authentication, and regu
 **Project ID:** SIH26261
 **Domain:** Educational certificates, admissions, and student applications
 
-**Status:** Milestone 1 — admissions review UI with synthetic fixtures and a deterministic eligibility engine.
+**Status:** Milestone 2C — admissions review UI with synthetic fixtures, deterministic eligibility, and cross-document consistency findings.
 
 ## Problem
 
@@ -22,14 +22,15 @@ EduVerify AI aims to provide:
 - Evidence-backed verification reports.
 - Human review and audit trails.
 
-Milestone 1 implements the eligibility review surface only, using synthetic application data. Extraction, consistency checks, anomaly detection, and trusted-source verification are not implemented yet.
+The current review surface uses synthetic application data and provides deterministic eligibility assessment and cross-document consistency findings. Extraction, anomaly detection, and trusted-source verification are not implemented.
 
 ## Current implementation
 
-- **Frontend:** React, Vite, TypeScript. Application table, detail panel, and eligibility evidence. Upload and Settings are visible but disabled.
-- **Backend:** Python, FastAPI. Read-only JSON API over in-memory fixtures.
+- **Frontend:** React, Vite, TypeScript. Application table, detail panel, eligibility evidence, and cross-document consistency findings. Upload and Settings are visible but disabled.
+- **Backend:** Python, FastAPI. Read-only JSON API over in-memory fixtures, including consistency results on application details.
 - **Eligibility engine:** Deterministic rules (R01–R05) with cited field evidence. Missing or unknown fields produce `requires_review`. Deterministic failures (score below floor, backlogs, missing or omitted mandatory documents, unmatched discipline) produce `ineligible`.
 - **Data:** Seven synthetic applications in `backend/data/fixtures.py`. Every record is marked `data_source: fixture`.
+- **Consistency:** Application and fixture-authored document values are compared deterministically; findings are independent of eligibility and do not verify document authenticity.
 
 ## Important limitations
 

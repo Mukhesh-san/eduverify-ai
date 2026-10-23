@@ -2,7 +2,7 @@
 
 ## Current milestone
 
-Milestone 2B: consistency findings included on `GET /api/applications/{application_id}`. Frontend unchanged.
+Milestone 2C: cross-document consistency findings displayed in the application detail view.
 
 ## Completed
 
@@ -19,13 +19,13 @@ Milestone 2B: consistency findings included on `GET /api/applications/{applicati
 - Upload Application and Settings remain visible and disabled.
 - Cross-document consistency engine (`backend/core/consistency.py`): compares applicant name, CGPA, and institution with optional fixture-authored `extracted_fields` on documents. Statuses: `consistent`, `mismatch`, `inconclusive`. Independent of eligibility.
 - A few fixtures include extracted fields (Priya: consistent including whitespace/case; Arjun: name mismatch; Rahul: unreadable marks card; Fatima: missing CGPA extraction).
+- Application detail UI displays the overall consistency status and field-level source values and evidence. Missing results and empty findings have explicit fallback states.
 
 ## Not yet implemented
 
 - Database integration.
 - Document upload and private storage.
 - OCR and field extraction.
-- Cross-document consistency UI (API detail response now includes findings).
 - Technical document-anomaly checks.
 - Trusted-source authenticity verification.
 - Reviewer actions (approve / reject / defer).
@@ -58,8 +58,10 @@ Milestone 2B: consistency findings included on `GET /api/applications/{applicati
 
 ## Next task
 
-After approval: show consistency findings on the application detail panel, without OCR, uploads, a database, or authenticity claims.
+Next: continue with a separately scoped milestone; consistency UI is limited to synthetic fixture evidence and does not affect eligibility.
 
 ## Latest verification
 
-- Pending this session: backend pytest after Milestone 2B.
+- Frontend production build: `npm run build` passed after installing the locked frontend dependencies.
+- Backend: `.venv\Scripts\python.exe -m pytest` — 63 passed, 2 dependency deprecation warnings.
+- Frontend: `npm run build` — passed after installing the locked frontend dependencies.

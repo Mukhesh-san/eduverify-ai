@@ -14,6 +14,8 @@ export type DocumentStatus = 'present' | 'missing' | 'unreadable'
 
 export type EligibilityOutcome = 'eligible' | 'ineligible' | 'requires_review'
 
+export type ConsistencyStatus = 'consistent' | 'mismatch' | 'inconclusive'
+
 export interface AcademicRecord {
   institution: string
   degree: string
@@ -43,6 +45,24 @@ export interface EligibilityResult {
   application_id: string
   outcome: EligibilityOutcome
   rules: RuleResult[]
+  summary: string
+}
+
+export interface ConsistencyFinding {
+  finding_id: string
+  field: string
+  left_source: string
+  right_source: string
+  left_value: string | null
+  right_value: string | null
+  status: ConsistencyStatus
+  evidence: string
+}
+
+export interface ConsistencyResult {
+  application_id: string
+  status: ConsistencyStatus
+  findings: ConsistencyFinding[]
   summary: string
 }
 
@@ -76,6 +96,7 @@ export interface ApplicationListResponse {
 export interface ApplicationDetailResponse {
   application: Application
   eligibility: EligibilityResult
+  consistency?: ConsistencyResult | null
 }
 
 export interface HealthResponse {
