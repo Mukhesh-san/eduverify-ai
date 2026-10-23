@@ -1,7 +1,44 @@
-import type { ApplicationDetailResponse } from '../types'
+import type { ApplicationDetailResponse, ConsistencyFinding, ConsistencyStatus } from '../types'
 import { ReviewStatusBadge, DocumentStatusBadge } from './StatusBadge'
 import { EligibilityPanel } from './EligibilityPanel'
 import './ApplicationDetail.css'
+
+const CONSISTENCY_STATUS_LABELS: Record<ConsistencyStatus, string> = {
+  consistent: 'Consistent',
+  mismatch: 'Mismatch',
+  inconclusive: 'Inconclusive',
+}
+
+function sourceLabel(source: string): string {
+  if (source.startsWith('application.')) return 'Application record'
+  return source.match(/^documents\['(.+)'\]/)?.[1] ?? source
+}
+
+function ConsistencyFindingRow({ finding }: { finding: ConsistencyFinding }) {
+  return (
+    <li className={`consistency-finding consistency-finding--${finding.status}`}>
+      <div className="consistency-finding__header">
+        <span className="consistency-finding__field">
+          {finding.field.replace(/_/g, ' ')}
+        </span>
+        <span className={`consistency-finding__status consistency-finding__status--${finding.status}`}>
+          {CONSISTENCY_STATUS_LABELS[finding.status]}
+        </span>
+      </div>
+      <dl className="consistency-finding__values">
+        <div>
+          <dt>{sourceLabel(finding.left_source)}</dt>
+          <dd>{finding.left_value?.trim() || 'Not available'}</dd>
+        </div>
+        <div>
+          <dt>{sourceLabel(finding.right_source)}</dt>
+          <dd>{finding.right_value?.trim() || 'Not available'}</dd>
+        </div>
+      </dl>
+      <p className="consistency-finding__evidence">{finding.evidence}</p>
+    </li>
+  )
+}
 
 interface ApplicationDetailProps {
   detail: ApplicationDetailResponse | null
@@ -138,6 +175,42 @@ export function ApplicationDetail({
                 </li>
               ))}
             </ul>
+          </section>
+
+          {/* Cross-document consistency */}
+          <section className="consistency-panel" aria-labelledby="consistency-heading">
+            <h3 className="app-detail__section-label" id="consistency-heading">
+              Cross-Document Consistency
+            </h3>
+            {!detail.consistency ? (
+              <p className="consistency-panel__empty" role="status">
+                Consistency results are not available for this application.
+              </p>
+            ) : (
+              <>
+                <div
+                  className={`consistency-panel__overall consistency-panel__overall--${detail.consistency.status}`}
+                  role="status"
+                >
+                  {CONSISTENCY_STATUS_LABELS[detail.consistency.status]}
+                </div>
+                <p className="consistency-panel__summary">{detail.consistency.summary}</p>
+                {detail.consistency.findings.length > 0 ? (
+                  <ul className="consistency-panel__findings" aria-label="Consistency findings">
+                    {detail.consistency.findings.map((finding) => (
+                      <ConsistencyFindingRow key={finding.finding_id} finding={finding} />
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="consistency-panel__empty">
+                    No field comparisons are available.
+                  </p>
+                )}
+                <p className="consistency-panel__disclaimer">
+                  Based on synthetic fixture data only. This is not OCR or document authenticity verification.
+                </p>
+              </>
+            )}
           </section>
 
           {/* Eligibility */}
