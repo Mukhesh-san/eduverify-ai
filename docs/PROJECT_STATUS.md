@@ -2,7 +2,7 @@
 
 ## Current milestone
 
-Milestone 2A: deterministic backend cross-document consistency evaluator on synthetic fixture fields. Not wired to the API or frontend.
+Milestone 2B: consistency findings included on `GET /api/applications/{application_id}`. Frontend unchanged.
 
 ## Completed
 
@@ -25,7 +25,7 @@ Milestone 2A: deterministic backend cross-document consistency evaluator on synt
 - Database integration.
 - Document upload and private storage.
 - OCR and field extraction.
-- Cross-document consistency API and UI (backend evaluator exists, not exposed).
+- Cross-document consistency UI (API detail response now includes findings).
 - Technical document-anomaly checks.
 - Trusted-source authenticity verification.
 - Reviewer actions (approve / reject / defer).
@@ -37,7 +37,7 @@ Milestone 2A: deterministic backend cross-document consistency evaluator on synt
 - Frontend: React, Vite, TypeScript (`frontend/`). Dev server proxies `/api` to `http://localhost:8000`.
 - Backend: Python, FastAPI (`backend/`). In-memory fixtures; GET-only CORS for the Vite origin.
 - Eligibility: `backend/core/eligibility.py`, schemas in `backend/models/schemas.py`.
-- Consistency: `backend/core/consistency.py` (not exposed via API).
+- Consistency: `backend/core/consistency.py`, returned on application detail.
 - Planned later: PostgreSQL / Supabase, OCR, private document storage.
 
 ## Product constraints
@@ -58,10 +58,8 @@ Milestone 2A: deterministic backend cross-document consistency evaluator on synt
 
 ## Next task
 
-After approval: expose consistency findings on the existing application-detail API (and then the detail panel), without OCR, uploads, a database, or authenticity claims.
+After approval: show consistency findings on the application detail panel, without OCR, uploads, a database, or authenticity claims.
 
 ## Latest verification
 
-- Backend: `.venv` → `python -m pytest` — **59 passed**, 2 warnings, 0.55s (2026-10-24).
-- Frontend was not rebuilt (no frontend changes).
-- No commit or push was made in this session.
+- Pending this session: backend pytest after Milestone 2B.

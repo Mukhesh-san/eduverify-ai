@@ -6,6 +6,7 @@ from __future__ import annotations
 
 from fastapi import APIRouter, HTTPException
 
+from backend.core.consistency import evaluate_consistency
 from backend.core.eligibility import evaluate_eligibility
 from backend.data.fixtures import APPLICATION_INDEX, APPLICATIONS
 from backend.models.schemas import (
@@ -68,7 +69,8 @@ def list_applications() -> ApplicationListResponse:
 )
 def get_application(application_id: str) -> ApplicationDetailResponse:
     """
-    Return full detail for a single application including eligibility results.
+    Return full detail for a single application including eligibility and
+    consistency results.
 
     Returns 404 if the application ID is not found.
     """
@@ -79,4 +81,9 @@ def get_application(application_id: str) -> ApplicationDetailResponse:
             detail=f"Application '{application_id}' not found.",
         )
     eligibility = evaluate_eligibility(app)
-    return ApplicationDetailResponse(application=app, eligibility=eligibility)
+    consistency = evaluate_consistency(app)
+    return ApplicationDetailResponse(
+        application=app,
+        eligibility=eligibility,
+        consistency=consistency,
+    )

@@ -106,6 +106,32 @@ class TestGetApplication:
         assert "source_note" in record
         assert "fixture" in record["source_note"].lower()
 
+    def test_detail_contains_consistency(self):
+        response = client.get("/api/applications/APP-2024-001")
+        data = response.json()
+        assert "consistency" in data
+        assert data["consistency"]["status"] == "consistent"
+        assert data["consistency"]["application_id"] == "APP-2024-001"
+        assert len(data["consistency"]["findings"]) == 4
+
+    def test_detail_consistency_mismatch(self):
+        response = client.get("/api/applications/APP-2024-002")
+        assert response.status_code == 200
+        consistency = response.json()["consistency"]
+        assert consistency["status"] == "mismatch"
+        assert any(f["status"] == "mismatch" for f in consistency["findings"])
+
+    def test_detail_consistency_inconclusive(self):
+        response = client.get("/api/applications/APP-2024-004")
+        assert response.status_code == 200
+        findings = response.json()["consistency"]["findings"]
+        assert any(f["status"] == "inconclusive" for f in findings)
+
+    def test_unknown_application_returns_404(self):
+        response = client.get("/api/applications/UNKNOWN-ID")
+        assert response.status_code == 404
+        assert "consistency" not in response.json()
+
     def test_all_fixture_ids_return_200(self):
         ids = [
             "APP-2024-001", "APP-2024-002", "APP-2024-003",

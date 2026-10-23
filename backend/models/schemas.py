@@ -217,3 +217,4 @@ class ApplicationListResponse(BaseModel):
 class ApplicationDetailResponse(BaseModel):
     application: Application
     eligibility: EligibilityResult
+    consistency: ConsistencyResult
