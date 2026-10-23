@@ -41,6 +41,12 @@ class EligibilityOutcome(str, Enum):
     REQUIRES_REVIEW = "requires_review"
 
 
+class ConsistencyStatus(str, Enum):
+    CONSISTENT = "consistent"
+    MISMATCH = "mismatch"
+    INCONCLUSIVE = "inconclusive"
+
+
 # ---------------------------------------------------------------------------
 # Sub-models
 # ---------------------------------------------------------------------------
@@ -74,12 +80,29 @@ class AcademicRecord(BaseModel):
     )
 
 
+class DocumentExtractedFields(BaseModel):
+    """Fixture-authored fields attributed to a document. Not OCR output."""
+
+    applicant_name: Optional[str] = None
+    institution: Optional[str] = None
+    cgpa: Optional[float] = None
+    graduation_year: Optional[int] = None
+    field_of_study: Optional[str] = None
+    source_note: str = Field(
+        default=(
+            "Fixture-authored extracted fields. "
+            "Not produced by OCR or trusted-source verification."
+        )
+    )
+
+
 class DocumentRecord(BaseModel):
     """Status of a single required supporting document."""
 
     name: str
     status: DocumentStatus
     note: Optional[str] = None
+    extracted_fields: Optional[DocumentExtractedFields] = None
 
 
 class RuleResult(BaseModel):
@@ -114,6 +137,28 @@ class EligibilityResult(BaseModel):
     summary: str = Field(
         description="Plain-language summary of why the outcome was reached."
     )
+
+
+class ConsistencyFinding(BaseModel):
+    """One field comparison between the application record and a document."""
+
+    finding_id: str
+    field: str
+    left_source: str
+    right_source: str
+    left_value: Optional[str] = None
+    right_value: Optional[str] = None
+    status: ConsistencyStatus
+    evidence: str
+
+
+class ConsistencyResult(BaseModel):
+    """Cross-document consistency assessment. Independent of eligibility."""
+
+    application_id: str
+    status: ConsistencyStatus
+    findings: list[ConsistencyFinding]
+    summary: str
 
 
 # ---------------------------------------------------------------------------

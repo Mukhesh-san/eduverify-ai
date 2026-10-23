@@ -2,7 +2,7 @@
 
 ## Current milestone
 
-Milestone 1 hardening: documentation aligned with the implemented stack, and eligibility outcomes corrected for missing or unknown fields.
+Milestone 2A: deterministic backend cross-document consistency evaluator on synthetic fixture fields. Not wired to the API or frontend.
 
 ## Completed
 
@@ -17,13 +17,15 @@ Milestone 1 hardening: documentation aligned with the implemented stack, and eli
 - Unreadable documents still produce `requires_review` when blocking rules pass.
 - Eligibility panel shows Pass / Fail / Review per rule.
 - Upload Application and Settings remain visible and disabled.
+- Cross-document consistency engine (`backend/core/consistency.py`): compares applicant name, CGPA, and institution with optional fixture-authored `extracted_fields` on documents. Statuses: `consistent`, `mismatch`, `inconclusive`. Independent of eligibility.
+- A few fixtures include extracted fields (Priya: consistent including whitespace/case; Arjun: name mismatch; Rahul: unreadable marks card; Fatima: missing CGPA extraction).
 
 ## Not yet implemented
 
 - Database integration.
 - Document upload and private storage.
 - OCR and field extraction.
-- Cross-document consistency checks.
+- Cross-document consistency API and UI (backend evaluator exists, not exposed).
 - Technical document-anomaly checks.
 - Trusted-source authenticity verification.
 - Reviewer actions (approve / reject / defer).
@@ -35,6 +37,7 @@ Milestone 1 hardening: documentation aligned with the implemented stack, and eli
 - Frontend: React, Vite, TypeScript (`frontend/`). Dev server proxies `/api` to `http://localhost:8000`.
 - Backend: Python, FastAPI (`backend/`). In-memory fixtures; GET-only CORS for the Vite origin.
 - Eligibility: `backend/core/eligibility.py`, schemas in `backend/models/schemas.py`.
+- Consistency: `backend/core/consistency.py` (not exposed via API).
 - Planned later: PostgreSQL / Supabase, OCR, private document storage.
 
 ## Product constraints
@@ -55,10 +58,10 @@ Milestone 1 hardening: documentation aligned with the implemented stack, and eli
 
 ## Next task
 
-After approval: add a small, fixture-based **cross-document consistency** check, kept separate from eligibility and without OCR, uploads, a database, or authenticity claims.
+After approval: expose consistency findings on the existing application-detail API (and then the detail panel), without OCR, uploads, a database, or authenticity claims.
 
 ## Latest verification
 
-- Backend: `python -m pytest` from the repository root using `.venv` — **46 passed**, 2 warnings, 0.73s (2026-10-24).
-- Frontend: `npm run build` in `frontend/` — **succeeded** (`tsc -b && vite build`, Vite 8.3.5).
+- Backend: `.venv` → `python -m pytest` — **59 passed**, 2 warnings, 0.55s (2026-10-24).
+- Frontend was not rebuilt (no frontend changes).
 - No commit or push was made in this session.

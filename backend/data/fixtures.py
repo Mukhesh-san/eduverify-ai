@@ -1,5 +1,5 @@
 """
-Synthetic application fixtures for EduVerify AI — Milestone 1.
+Synthetic application fixtures for EduVerify AI.
 
 IMPORTANT: All data here is fictional and was manually authored for
 development and demonstration purposes. It has NOT been produced by OCR,
@@ -12,6 +12,7 @@ Do not use this data to make real admissions decisions.
 from backend.models.schemas import (
     AcademicRecord,
     Application,
+    DocumentExtractedFields,
     DocumentRecord,
     DocumentStatus,
     ReviewStatus,
@@ -46,10 +47,27 @@ APPLICATIONS: list[Application] = [
         documents=[
             DocumentRecord(name="10th Mark Sheet", status=DocumentStatus.PRESENT),
             DocumentRecord(name="12th Mark Sheet", status=DocumentStatus.PRESENT),
-            DocumentRecord(name="Undergraduate Degree Certificate", status=DocumentStatus.PRESENT),
-            DocumentRecord(name="Undergraduate Consolidated Marks Card", status=DocumentStatus.PRESENT),
+            DocumentRecord(
+                name="Undergraduate Degree Certificate",
+                status=DocumentStatus.PRESENT,
+                extracted_fields=DocumentExtractedFields(
+                    applicant_name="Priya Rajan",
+                    institution="National Institute of Technology, Trichy",
+                ),
+            ),
+            DocumentRecord(
+                name="Undergraduate Consolidated Marks Card",
+                status=DocumentStatus.PRESENT,
+                extracted_fields=DocumentExtractedFields(cgpa=8.7),
+            ),
             DocumentRecord(name="Transfer Certificate", status=DocumentStatus.PRESENT),
-            DocumentRecord(name="Aadhar Card", status=DocumentStatus.PRESENT),
+            DocumentRecord(
+                name="Aadhar Card",
+                status=DocumentStatus.PRESENT,
+                extracted_fields=DocumentExtractedFields(
+                    applicant_name="  PRIYA   Rajan ",
+                ),
+            ),
             DocumentRecord(name="Category Certificate", status=DocumentStatus.MISSING, note="Applicant indicated General category; no certificate required."),
         ],
     ),
@@ -80,7 +98,13 @@ APPLICATIONS: list[Application] = [
             DocumentRecord(name="Undergraduate Degree Certificate", status=DocumentStatus.MISSING, note="Degree award pending; provisional certificate submitted instead."),
             DocumentRecord(name="Undergraduate Consolidated Marks Card", status=DocumentStatus.PRESENT),
             DocumentRecord(name="Transfer Certificate", status=DocumentStatus.PRESENT),
-            DocumentRecord(name="Aadhar Card", status=DocumentStatus.PRESENT),
+            DocumentRecord(
+                name="Aadhar Card",
+                status=DocumentStatus.PRESENT,
+                extracted_fields=DocumentExtractedFields(
+                    applicant_name="Arjun Nair",
+                ),
+            ),
             DocumentRecord(name="OBC Certificate", status=DocumentStatus.PRESENT),
         ],
     ),
@@ -172,9 +196,18 @@ APPLICATIONS: list[Application] = [
             DocumentRecord(name="10th Mark Sheet", status=DocumentStatus.PRESENT),
             DocumentRecord(name="12th Mark Sheet", status=DocumentStatus.PRESENT),
             DocumentRecord(name="Undergraduate Degree Certificate", status=DocumentStatus.PRESENT),
-            DocumentRecord(name="Undergraduate Consolidated Marks Card", status=DocumentStatus.PRESENT),
+            DocumentRecord(
+                name="Undergraduate Consolidated Marks Card",
+                status=DocumentStatus.PRESENT,
+            ),
             DocumentRecord(name="Transfer Certificate", status=DocumentStatus.MISSING, note="Transfer certificate from institution pending."),
-            DocumentRecord(name="Aadhar Card", status=DocumentStatus.PRESENT),
+            DocumentRecord(
+                name="Aadhar Card",
+                status=DocumentStatus.PRESENT,
+                extracted_fields=DocumentExtractedFields(
+                    applicant_name="Fatima Ansari",
+                ),
+            ),
             DocumentRecord(name="EWS Certificate", status=DocumentStatus.PRESENT),
         ],
     ),
